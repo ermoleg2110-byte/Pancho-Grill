@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="container py-5">
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card cart-card p-4 bg-white">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1 class="section-title mb-0">Корзина</h1>
+                    <span class="badge text-bg-dark rounded-pill px-3 py-2">Всего позиций: {{ cart_count }}</span>
+                </div>
+
+                <div class="d-flex flex-column gap-3">
+				{% for item in cart_items %}
+					<div class="border rounded-4 p-3 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+						<div>
+							<h5 class="mb-1">{{ item.name }}</h5>
+							<div class="text-muted">Количество: {{ item.qty }}</div>
+						</div>
+
+						<div class="d-flex align-items-center gap-2 flex-wrap">
+							<div class="fw-semibold">{{ item.line_total }} ₽</div>
+
+							<form method="post" action="{% url 'change_cart_qty' item.menu_item.id 'minus' %}">
+								{% csrf_token %}
+								<button type="submit" class="btn btn-outline-secondary rounded-pill">−</button>
+							</form>
+
+							<form method="post" action="{% url 'change_cart_qty' item.menu_item.id 'plus' %}">
+								{% csrf_token %}
+								<button type="submit" class="btn btn-outline-secondary rounded-pill">+</button>
+							</form>
+
+							<form method="post" action="{% url 'remove_from_cart' item.menu_item.id %}">
+								{% csrf_token %}
+								<button type="submit" class="btn btn-outline-danger rounded-pill">Убрать</button>
+							</form>
+						</div>
+					</div>
+				{% empty %}
+					<div class="border rounded-4 p-4 text-muted">
+						Корзина пуста.
+					</div>
+				{% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card cart-card p-4 bg-dark text-white">
+                <h3 class="mb-4">Итого</h3>
+                <div class="d-flex justify-content-between mb-2"><span>Сумма</span><strong>{{ cart_total }} ₽</strong></div>
+                {% if cart_total >= 1200 %}
+                <div class="d-flex justify-content-between mb-2"><span>Доставка</span><strong>Бесплатно</strong></div>
+                {% elif cart_total > 0 %}
+                <div class="d-flex justify-content-between mb-2"><span>Доставка</span><strong>350 ₽</strong></div>
+                {% endif %}
+                {% if cart_total >= 1200 %}
+                <div class="d-flex justify-content-between mb-4"><span>Скидка</span><strong>{{ discount }} ₽</strong></div>
+                {% endif %}
+                <hr>
+                {% if cart_total >= 1200 %}
+                <div class="d-flex justify-content-between fs-5 mb-4"><span>К оплате</span><strong>{{ result }} ₽</strong></div>
+                {% elif cart_total > 0 %}
+                <div class="d-flex justify-content-between fs-5 mb-4"><span>К оплате</span><strong>{{ cart_total|add:350 }} ₽</strong></div>
+                {% endif %}
+				{% if cart_total > 700 %}
+                <a href="{% url 'checkout' %}" class="btn btn-light rounded-pill w-100">Перейти к оформлению</a>
+				{% else %}
+				<a href="{% url 'checkout' %}" class="btn btn-light rounded-pill w-100 disabled">Перейти к оформлению</a>
+				{% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

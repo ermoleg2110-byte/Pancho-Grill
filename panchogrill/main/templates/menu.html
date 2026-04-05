@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="container py-5">
+    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-4">
+        <div>
+            <h1 class="section-title mb-2">Меню</h1>
+            <p class="text-muted mb-0">Что мы готовим</p>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+            {% for category in categories %}
+                <a class="btn btn-light border rounded-pill" href="#{{ category.slug }}">{{ category.title }}</a>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% for category in categories %}
+        <section id="{{ category.slug }}" class="category-anchor py-3">
+            <div class="category-card bg-white p-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+                    <div>
+                        <h2 class="h3 mb-1">{{ category.title }}</h2>
+                        <p class="text-muted mb-0">{{ category.description }}</p>
+                    </div>
+                    <span class="badge text-bg-dark rounded-pill px-3 py-2">{{ category.items|length }} поз.</span>
+                </div>
+                <div class="row g-4">
+                    {% for item in category.items %}
+                        <div class="col-md-6 col-xl-3">
+                            <div class="card food-card h-100 p-3 bg-light-subtle">
+                                <div class="food-image mb-3">{{ item.image }}</div>
+                                <div class="badge text-bg-warning rounded-pill align-self-start mb-2">{{ item.badge }}</div>
+                                <h5>{{ item.name }}</h5>
+                                <div class="text-muted small mb-3">{{ item.weight }}</div>
+                                <div class="mt-auto d-flex justify-content-between align-items-center">
+                                    <span class="price">{{ item.price }} ₽</span>
+                                    <form method="post" action="{% url 'add_to_cart' item.id %}">
+										{% csrf_token %}
+										<button type="submit" class="btn btn-brand rounded-pill">Добавить</button>
+									</form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    {% endfor %}
+</section>
+{% endblock %}

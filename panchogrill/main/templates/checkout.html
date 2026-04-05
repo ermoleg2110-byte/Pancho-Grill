@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="container py-5">
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="card checkout-card p-4 bg-white">
+                <h1 class="section-title mb-4">Оформление заказа</h1>
+                <form>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Имя</label>
+                            <input type="text" class="form-control form-control-lg" placeholder="Ваше имя">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Телефон</label>
+                            <input type="text" class="form-control form-control-lg" placeholder="+7 (...) ...-..-..">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Адрес доставки</label>
+                            <input type="text" class="form-control form-control-lg" placeholder="Улица, дом, квартира">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Способ получения</label>
+                            <select class="form-select form-select-lg">
+                                <option>Доставка</option>
+                                <option>Самовывоз</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Способ оплаты</label>
+                            <select class="form-select form-select-lg">
+                                <option>Картой онлайн</option>
+                                <option>Наличными курьеру</option>
+                                <option>Картой при получении</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Комментарий к заказу</label>
+                            <textarea class="form-control" rows="4" placeholder="Например: не звонить в домофон"></textarea>
+                        </div>
+                        <div class="col-12 d-grid d-md-flex gap-3 pt-2">
+                            <button type="submit" class="btn btn-brand btn-lg rounded-pill px-4">Подтвердить заказ</button>
+                            <a href="{% url 'menu' %}" class="btn btn-outline-dark btn-lg rounded-pill px-4">Вернуться в меню</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="card checkout-card p-4 bg-dark text-white mb-4">
+                <h3 class="mb-3">Ваш заказ</h3>
+                <div class="d-flex flex-column gap-3">
+                    {% for item in cart_items %}
+                        <div class="d-flex justify-content-between gap-3">
+                            <span>{{ item.name }} × {{ item.qty }}</span>
+                            <strong>{{ item.line_total }} ₽</strong>
+                        </div>
+                    {% endfor %}
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between fs-5">
+                    <span>Итого</span>
+                    <strong>{{ cart_total }} ₽</strong>
+                </div>
+            </div>
+            <div class="card checkout-card p-4 bg-white">
+                <h4 class="mb-3">Условия доставки</h4>
+                <div class="d-flex flex-column gap-2 text-muted">
+                    <div>• Минимальный заказ: 700 ₽</div>
+                    <div>• Бесплатная доставка от 1200 ₽</div>
+                    <div>• Среднее время доставки: 35–60 минут</div>
+                    <div>• Самовывоз со скидкой 10%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

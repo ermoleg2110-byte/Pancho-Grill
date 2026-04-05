@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+<section class="auth-shell">
+    <div class="row g-12 align-items-stretch">
+        <div class="col-lg-6">
+            <div class="auth-card h-100">
+                <span class="hero-pill text-dark border-0 bg-light mb-3">Аккаунт</span>
+                <h1 class="fw-bold mb-2">Вход</h1>
+                <p class="text-secondary mb-4">Войдите, чтобы продолжить работу с сайтом.</p>
+
+                <form method="post" class="auth-form row g-3">
+                    {% csrf_token %}
+                    {% if request.GET.next %}
+                        <input type="hidden" name="next" value="{{ request.GET.next }}">
+                    {% endif %}
+
+                    {% if form.non_field_errors %}
+                        <div class="col-12">
+                            <div class="alert alert-danger rounded-4 border-0">{{ form.non_field_errors }}</div>
+                        </div>
+                    {% endif %}
+
+                    {% for field in form %}
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}<div class="helptext text-muted">{{ field.help_text|safe }}</div>{% endif %}
+                            {{ field.errors }}
+                        </div>
+                    {% endfor %}
+
+                    <div class="col-12 d-flex flex-wrap gap-3 pt-2">
+                        <button type="submit" class="btn btn-brand btn-lg rounded-pill px-4">Войти</button>
+                        <a href="{% url 'register' %}" class="btn btn-outline-secondary btn-lg rounded-pill px-4">Создать аккаунт</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

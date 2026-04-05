@@ -1,0 +1,84 @@
+cd pancho && python manage.py shell -c "
+from main.models import CartItem, Category, ContactInfo, MenuItem, Promo
+
+CartItem.objects.all().delete()
+MenuItem.objects.all().delete()
+Promo.objects.all().delete()
+ContactInfo.objects.all().delete()
+Category.objects.all().delete()
+
+panchi = Category.objects.create(
+    slug='panchi',
+    title='Панчи',
+    description='Фирменные большие роллы и панчи',
+)
+burgers = Category.objects.create(
+    slug='burgers',
+    title='Бургеры',
+    description='Сочные бургеры на каждый день',
+)
+boxes = Category.objects.create(
+    slug='boxes',
+    title='Боксы',
+    description='Комбо-наборы для одного или компании',
+)
+snacks = Category.objects.create(
+    slug='snacks',
+    title='Снеки',
+    description='Картошка, наггетсы и горячие закуски',
+)
+soups = Category.objects.create(
+    slug='soups',
+    title='Супы',
+    description='Горячие супы для сытного обеда',
+)
+drinks = Category.objects.create(
+    slug='drinks',
+    title='Напитки',
+    description='Лимонады и прохладительные напитки',
+)
+
+MenuItem.objects.create(category=panchi, name='Панч Классический', price=280, weight='400 г', badge='Хит', image='🌯')
+MenuItem.objects.create(category=panchi, name='Панч Royal', price=270, weight='400 г', badge='Популярно', image='🫓')
+MenuItem.objects.create(category=panchi, name='Фламенко', price=285, weight='400 г', badge='Острое', image='🌶️')
+MenuItem.objects.create(category=panchi, name='Чизи', price=280, weight='400 г', badge='Сырный', image='🧀')
+
+MenuItem.objects.create(category=burgers, name='Crispy Бургер', price=310, weight='325 г', badge='Новинка', image='🍔')
+MenuItem.objects.create(category=burgers, name='Miami', price=295, weight='325 г', badge='Фирменный', image='🍔')
+MenuItem.objects.create(category=burgers, name='Monster Бургер', price=295, weight='375 г', badge='Большой', image='🍔')
+MenuItem.objects.create(category=burgers, name='Чикаго Бургер', price=280, weight='325 г', badge='Хит', image='🍔')
+MenuItem.objects.create(category=burgers, name='Royal Бургер', price=230, weight='350 г', badge='Хит', image='🍔')
+
+MenuItem.objects.create(category=boxes, name='Cheetos Box', price=330, weight='375 г', badge='Комбо', image='🍱')
+MenuItem.objects.create(category=boxes, name='Crazy Box', price=305, weight='375 г', badge='Комбо', image='🍟')
+MenuItem.objects.create(category=boxes, name='Daddy Box', price=385, weight='375 г', badge='Большой', image='🍗')
+MenuItem.objects.create(category=boxes, name='Magic Box', price=305, weight='375 г', badge='Популярно', image='🥡')
+
+MenuItem.objects.create(category=snacks, name='Картофель Фри', price=240, weight='180 г', badge='Хрустящий', image='🍟')
+MenuItem.objects.create(category=snacks, name='Наггетсы', price=265, weight='300 г', badge='Детям', image='🍗')
+MenuItem.objects.create(category=snacks, name='Сырные шарики', price=240, weight='180 г', badge='Сыр', image='🧆')
+MenuItem.objects.create(category=snacks, name='Курица Royal', price=255, weight='180 г', badge='Хит', image='🍖')
+
+MenuItem.objects.create(category=soups, name='Суп Том-Ям', price=339, weight='400 г', badge='Острое', image='🍜')
+MenuItem.objects.create(category=soups, name='Куриный Чикен Чиз', price=289, weight='400 г', badge='Сливочный', image='🥣')
+
+MenuItem.objects.create(category=drinks, name='Ананасовый Луфи', price=120, weight='500 мл', badge='Лимонад', image='🍍')
+MenuItem.objects.create(category=drinks, name='Вишнёвая Сакура', price=120, weight='500 мл', badge='Лимонад', image='🍒')
+MenuItem.objects.create(category=drinks, name='Вода', price=65, weight='500 мл', badge='Без газа', image='💧')
+MenuItem.objects.create(category=drinks, name='Лимонный Сатоси', price=120, weight='500 мл', badge='Освежает', image='🍋')
+
+Promo.objects.create(title='Бесплатная доставка от 1200 ₽', text='А также скидка 10%')
+Promo.objects.create(title='Комбо недели', text='Чикаго Бургер + Crazy Box + Лимонный Сатоси')
+
+ContactInfo.objects.create(
+    city='Волгоград',
+    schedule='Круглосуточно',
+    phone='8 (800) 555-35-35',
+    address='ул. Генерала Штеменко, 34',
+)
+
+CartItem.objects.create(menu_item=MenuItem.objects.get(name='Панч Классический'), qty=2)
+CartItem.objects.create(menu_item=MenuItem.objects.get(name='Crispy Бургер'), qty=1)
+
+print(Category.objects.count(), MenuItem.objects.count(), Promo.objects.count(), CartItem.objects.count())
+"
